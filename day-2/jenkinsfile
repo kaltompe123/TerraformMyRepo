@@ -14,11 +14,11 @@ environment {
 
     stages {
 
-        stage('checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/kaltompe123/TerraformMyRepo.git'
-            }
-        }
+       # stage('checkout') {
+       #    steps {
+       #         git branch: 'main', url: 'https://github.com/kaltompe123/TerraformMyRepo.git'
+       #    }
+       # }   ##this is not required as we are calling from git jenkin file from git itself.
 
         stage('init') {
             steps {
