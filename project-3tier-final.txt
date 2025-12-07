@@ -1,0 +1,134 @@
+1.create two pubic "ubuntu" servers in project-vpc    one is for frontend and another one is for backend
+2 create rds database in project-vpc
+3 copy the rds end point
+4.create route 53 private hosted zone with project vpc name is "rds.com"
+5. create record  sub domain is book,, select cnamerecord type ,,,, in the value paste your rds end point ,, then create record
+6. connect to front end server
+
+
+---------------------------------- FrontEnd---------------------------------------
+
+-------Step-1-------install dependencies ------
+ create shell script file "ex:vi test.sh"
+ paste below commands
+
+
+#!/bin/bash
+
+sudo apt update -y
+
+sudo apt install apache2 -y
+sudo systemctl enable apache2
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
+sudo apt-get install -y nodejs -y
+
+
+
+
+-- step-2-----------Modifying config.js
+then clone your git repo 
+   git clone https://github.com/CloudTechDevOps/2nd10WeeksofCloudOps-main.git
+#############################################################################
+git clone https://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@github.com/CloudTechDevOps/2nd10WeeksofCloudOps-main.git   
+##############################################################################   
+   
+   
+  checkout client cd client 
+
+11. edit the config.js
+
+vi client/src/pages/config.js
+  
+const API_BASE_URL = "http://api.narni.co.in";
+ 
+in above line change to your backend publicip
+const API_BASE_URL = "http://publicip";
+ex;const API_BASE_URL = "http://32.68.98.10";
+
+
+------------------------------------------- step-3 ----------- Run 
+12. then go to client directory 
+13.run below commands
+
+****(Use npm run build:
+When preparing the app for deployment (e.g., to a server or hosting service like AWS, Netlify, or Vercel).
+Use npm start:
+During development or to start the app in production (for backend apps).)*****
+
+npm install 
+npm run build
+sudo cp -r build/* /var/www/html
+
+your frontend part is completed 
+
+
+
+
+
+-----------------then connect to backend server---------------------------
+
+
+
+----------------- step-1-------
+1.create shell script file "ex:vi test.sh"
+1.paste below commands
+
+#!/bin/bash
+
+sudo apt update -y
+
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
+sudo apt-get install -y nodejs -y
+
+
+sudo npm install -g pm2
+
+
+--------------- step-2-------
+
+3.then clone your git repo 
+   git clone https://github.com/CloudTechDevOps/2nd10WeeksofCloudOps-main.git
+   cd backend 
+4 edit the .env file in bellow path if u dont have any .env file just create in below path
+
+2nd10WeeksofCloudOps-main.git/backend/.env
+
+### add this mater
+DB_HOST=book.rds.com
+DB_USERNAME=admin	#cahnge to nyour rds user name 
+DB_PASSWORD="veera"   # change to your rds password
+PORT=3306
+
+
+
+----------- step-3---------
+ then run below command in backend directory
+  
+npm install
+npm install dotenv
+
+sudo pm2 start index.js --name "backendApi"
+
+sudo pm2 startup
+
+sudo systemctl enable pm2-root
+
+sudo pm2 save
+
+
+-----------------step-4--------------------------
+
+
+22. install MySQL in backend server
+
+sudo apt install mysql-server -y
+
+
+
+
+23 in the backend directory use below command to initialize the database 
+
+mysql -h book.rds.com -u admin -p<password> < test.sql
+
+27. now hit your frontend server public ip you will get response 
+28. add the books 
