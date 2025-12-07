@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+environment {
+    TF_DIR = "day-2"
+}
+    parameters {
+        choice(
+            name: 'ACTION',
+            choices: ['apply', 'destroy'],
+            description: 'Select Terraform action for final stage'
+        )
+    }
+
+    stages {
+
+        stage('checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/kaltompe123/TerraformMyRepo.git'
+            }
+        }
+
+        stage('init') {
+            steps {
+                dir("${env.TF_DIR}") {
+                    sh 'terraform init'
+                }
+            }
+        }
+
+        stage('plan') {
+            steps {
+                dir("${env.TF_DIR}") {
+                    sh 'terraform plan'
+                }
+            }
+        }
+
+        stage('apply/destroy') {
+            steps {
+                dir("${env.TF_DIR}") {
+                    sh "terraform ${ACTION} -auto-approve"
+                }
+            }
+        }
+    }
+}
