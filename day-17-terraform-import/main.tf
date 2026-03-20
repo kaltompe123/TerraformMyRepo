@@ -7,3 +7,10 @@ resource "aws_instance" "testname1" {
   ami           = "ami-02457590d33d576c3"
   instance_type = "t2.micro"
 }
+
+##rpm -qa 
+#dgdjd
+#
+#51861 
+#hskksh
+#failed 
