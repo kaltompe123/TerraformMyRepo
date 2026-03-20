@@ -8,9 +8,3 @@ resource "aws_instance" "testname1" {
   instance_type = "t2.micro"
 }
 
-##rpm -qa 
-#dgdjd
-#
-#51861 
-#hskksh
-#failed 
